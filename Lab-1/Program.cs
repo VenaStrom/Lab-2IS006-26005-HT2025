@@ -11,9 +11,38 @@ internal class Program
     Enemy enemy1 = new("Goblin", 80);
     enemy1.Armor = 20;
     enemy1.Damage = 15;
+  }
 
+  static void SimpleFight()
+  {
+    Player player1 = new("Hero", 100);
+    player1.Armor = 50;
+    player1.Damage = 30;
+
+    Enemy enemy1 = new("Goblin", 80);
+    enemy1.Armor = 20;
+    enemy1.Damage = 15;
+
+    Console.WriteLine("Enter the field:");
     player1.Print();
     enemy1.Print();
+    Thread.Sleep(1000);
+
+    Console.WriteLine("Round 1!");
+    player1.Attack(enemy1);
+    enemy1.Print();
+    Thread.Sleep(1000);
+    enemy1.Attack(player1);
+    player1.Print();
+    Thread.Sleep(1000);
+
+    Console.WriteLine("Round 2!");
+    player1.Attack(enemy1);
+    enemy1.Print();
+    Thread.Sleep(1000);
+    enemy1.Attack(player1);
+    player1.Print();
+    Thread.Sleep(1000);
   }
 }
 
