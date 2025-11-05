@@ -1,4 +1,3 @@
-
 using System.Numerics;
 
 class Camera(Vector3 position, Vector3 rotation, List<Mesh> scene, float charAspect = 0.5f)
@@ -7,6 +6,10 @@ class Camera(Vector3 position, Vector3 rotation, List<Mesh> scene, float charAsp
   public Vector3 Rotation = rotation;
 
   private List<Mesh> scene = scene;
+
+  // toggles: set these at runtime to control rendering mode
+  public static bool RenderFaces = true; // when false, draw wireframe (edges only)
+  public static bool BackfaceCulling = false; // when false, don't cull backfaces
 
   private int width = Console.WindowWidth;
   private int height = Math.Max(1, Console.WindowHeight);
@@ -43,11 +46,14 @@ class Camera(Vector3 position, Vector3 rotation, List<Mesh> scene, float charAsp
         Vector3 v2 = mesh.Vertices[face.Item2];
         Vector3 v3 = mesh.Vertices[face.Item3];
 
-        // Backface culling (in world space): skip faces whose normal points away from the camera
-        Vector3 normal = Vector3.Cross(v2 - v1, v3 - v1);
-        Vector3 toCamera = Position - v1;
-        if (Vector3.Dot(normal, toCamera) <= 0)
-          continue;
+        // Backface culling (optional). Use a small epsilon so culling isn't overly aggressive.
+        if (BackfaceCulling)
+        {
+          Vector3 normal = Vector3.Cross(v2 - v1, v3 - v1);
+          Vector3 toCamera = Position - v1;
+          if (Vector3.Dot(normal, toCamera) <= 1e-6f)
+            continue;
+        }
 
         Vector4 tv1 = Vector4.Transform(new Vector4(v1, 1), viewMatrix);
         Vector4 tv2 = Vector4.Transform(new Vector4(v2, 1), viewMatrix);
@@ -116,7 +122,14 @@ class Camera(Vector3 position, Vector3 rotation, List<Mesh> scene, float charAsp
           }
         }
 
-        if (Math.Abs(denom) < 1e-6f)
+        if (!RenderFaces)
+        {
+          // wireframe mode: just draw triangle edges
+          DrawEdge(sx1, sy1, pv1.Z, sx2, sy2, pv2.Z);
+          DrawEdge(sx2, sy2, pv2.Z, sx3, sy3, pv3.Z);
+          DrawEdge(sx3, sy3, pv3.Z, sx1, sy1, pv1.Z);
+        }
+        else if (Math.Abs(denom) < 1e-6f)
         {
           // degenerate triangle (collinear): draw edges so at least lines are visible
           DrawEdge(sx1, sy1, pv1.Z, sx2, sy2, pv2.Z);

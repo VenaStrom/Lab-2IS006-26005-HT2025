@@ -10,8 +10,7 @@ class Program
                     [new(0, 1, 2), new(0, 2, 3), new(4, 5, 6), new(4, 6, 7), new(0, 1, 5), new(0, 5, 4), new(2, 3, 7), new(2, 7, 6), new(1, 2, 6), new(1, 6, 5), new(0, 3, 7), new(0, 7, 4)]);
     Camera camera = new(new(0.5f, 0.5f, -4), new(0, 0, 0), [cube]);
 
-    // Tilt 45 degs to the camera
-    cube.RotateAroundCenter(new Vector3(0.3f, 0, 0));
+    cube.RotateAroundCenter(new Vector3(-0.30f, 0, -0.30f));
 
     float[,] depths = camera.Render();
     Viewport.Draw(depths);
@@ -20,6 +19,8 @@ class Program
     {
       // Rotate cube around vertical axis
       cube.RotateAroundCenter(new Vector3(0, 0.05f, 0));
+      // Random rng = new Random();
+      // cube.RotateAroundCenter(new Vector3((float)(rng.NextDouble() - 0.5) * 0.02f, (float)(rng.NextDouble() - 0.5) * 0.02f, (float)(rng.NextDouble() - 0.5) * 0.02f));
 
       depths = camera.Render();
       Viewport.Draw(depths);
