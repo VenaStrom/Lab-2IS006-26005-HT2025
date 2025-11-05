@@ -1,20 +1,6 @@
 
 class Viewport
 {
-  public static readonly Dictionary<char, ConsoleColor> DepthColors = new Dictionary<char, ConsoleColor>
-  {
-    {' ', ConsoleColor.Black},
-    {'.', ConsoleColor.DarkBlue},
-    {':', ConsoleColor.Blue},
-    {'-', ConsoleColor.Cyan},
-    {'=', ConsoleColor.Green},
-    {'+', ConsoleColor.Yellow},
-    {'*', ConsoleColor.Magenta},
-    {'#', ConsoleColor.Red},
-    {'%', ConsoleColor.White},
-    {'@', ConsoleColor.Gray}
-  };
-
   public static char GetDepthChar(float depth)
   {
     // if (depth < 0.1f) return ' ';
@@ -54,18 +40,19 @@ class Viewport
     int width = pixelDepths.GetLength(0);
     int height = pixelDepths.GetLength(1);
 
+    string buffer = "";
+
     for (int y = 0; y < height; y++)
     {
       for (int x = 0; x < width; x++)
       {
         float depth = pixelDepths[x, y];
         char depthChar = GetDepthChar(depth);
-        ConsoleColor color = DepthColors[depthChar];
-        System.Console.ForegroundColor = color;
-        System.Console.Write(depthChar);
+        buffer += depthChar;
       }
-      System.Console.WriteLine();
+      buffer += "\n";
     }
-    System.Console.ResetColor();
+    Console.Clear();
+    Console.Write(buffer);
   }
 }

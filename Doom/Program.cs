@@ -15,8 +15,6 @@ class Program
 
     while (true)
     {
-      Console.Clear();
-
       // Rotate cube around vertical axis
       cube.RotateAroundCenter(new Vector3(0, 0.05f, 0));
 
