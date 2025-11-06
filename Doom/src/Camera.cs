@@ -8,7 +8,7 @@ class Camera(Vector3 position, Vector3 rotation, List<Mesh> scene, float charAsp
   private List<Mesh> scene = scene;
 
   // toggles: set these at runtime to control rendering mode
-  public static bool RenderFaces = true; // when false, draw wireframe (edges only)
+  public static bool RenderFaces = false; // when false, draw wireframe (edges only)
   public static bool BackfaceCulling = false; // when false, don't cull backfaces
 
   private int width = Console.WindowWidth;
@@ -46,12 +46,23 @@ class Camera(Vector3 position, Vector3 rotation, List<Mesh> scene, float charAsp
         Vector3 v2 = mesh.Vertices[face.Item2];
         Vector3 v3 = mesh.Vertices[face.Item3];
 
-        // Backface culling (optional). Use a small epsilon so culling isn't overly aggressive.
+        // Backface culling (optional). Compute normal in view space so mesh rotation/position
+        // and the camera transform are accounted for correctly.
         if (BackfaceCulling)
         {
-          Vector3 normal = Vector3.Cross(v2 - v1, v3 - v1);
-          Vector3 toCamera = Position - v1;
-          if (Vector3.Dot(normal, toCamera) <= 1e-6f)
+          // transform vertices to view space first
+          Vector4 tv1_local = Vector4.Transform(new Vector4(v1, 1), viewMatrix);
+          Vector4 tv2_local = Vector4.Transform(new Vector4(v2, 1), viewMatrix);
+          Vector4 tv3_local = Vector4.Transform(new Vector4(v3, 1), viewMatrix);
+
+          Vector3 v1v = new Vector3(tv1_local.X, tv1_local.Y, tv1_local.Z);
+          Vector3 v2v = new Vector3(tv2_local.X, tv2_local.Y, tv2_local.Z);
+          Vector3 v3v = new Vector3(tv3_local.X, tv3_local.Y, tv3_local.Z);
+
+          Vector3 normalView = Vector3.Cross(v2v - v1v, v3v - v1v);
+          // in view space the camera is at origin, so vector from triangle to camera is -v1v
+          float nd = Vector3.Dot(normalView, -v1v);
+          if (nd <= 1e-6f)
             continue;
         }
 
@@ -182,5 +193,11 @@ class Camera(Vector3 position, Vector3 rotation, List<Mesh> scene, float charAsp
       0, 0, farClip / (farClip - nearClip), 1,
       0, 0, (-farClip * nearClip) / (farClip - nearClip), 0
     );
+  }
+
+  public Vector3 SetPosition(Vector3 newPosition)
+  {
+    Position = newPosition;
+    return Position;
   }
 }
