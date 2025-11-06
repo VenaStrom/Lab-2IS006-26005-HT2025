@@ -1,10 +1,10 @@
 
 class Viewport
 {
-  public static char GetDepthChar(float depth)
+  public static char GetDepthChar(float depth, float minDepth, float maxDepth)
   {
     // Convert depth to 0.0 - 1.0 range
-    float normalizedDepth = (depth - 0.97509754f) / (0.9800981f - 0.97509754f);
+    float normalizedDepth = (depth - minDepth) / (maxDepth - minDepth);
 
     if (normalizedDepth < 0.1f) return '@';
     else if (normalizedDepth < 0.2f) return '%';
@@ -23,6 +23,9 @@ class Viewport
     int width = pixelDepths.GetLength(0);
     int height = pixelDepths.GetLength(1);
 
+    float minDepth = pixelDepths.Cast<float>().Where(d => d < float.MaxValue).Min();
+    float maxDepth = pixelDepths.Cast<float>().Where(d => d < float.MaxValue).Max();
+
     string buffer = "";
 
     for (int y = 0; y < height; y++)
@@ -30,7 +33,7 @@ class Viewport
       for (int x = 0; x < width; x++)
       {
         float depth = pixelDepths[x, y];
-        char depthChar = GetDepthChar(depth);
+        char depthChar = GetDepthChar(depth, minDepth, maxDepth);
         buffer += depthChar;
       }
       buffer += "\n";
