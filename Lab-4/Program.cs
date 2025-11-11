@@ -20,7 +20,7 @@
     rect2.Scale(0.5, 1.5);
     rect2.Print();
 
-    rect.CopyArea(rect2);
+    rect.SetArea(rect2);
     rect.Print();
     rect2.Print();
   }
