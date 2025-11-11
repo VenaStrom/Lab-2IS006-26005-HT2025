@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doom", "Doom\Doom.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lab-4", "Lab-4\Lab-4.csproj", "{987F6570-CB1D-4AEC-B243-12A37547392D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lab-5", "Lab-5\Lab-5.csproj", "{A6DB2D33-2408-4CB2-88CB-A955D162A59B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +40,10 @@ Global
 		{987F6570-CB1D-4AEC-B243-12A37547392D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{987F6570-CB1D-4AEC-B243-12A37547392D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{987F6570-CB1D-4AEC-B243-12A37547392D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6DB2D33-2408-4CB2-88CB-A955D162A59B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6DB2D33-2408-4CB2-88CB-A955D162A59B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6DB2D33-2408-4CB2-88CB-A955D162A59B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6DB2D33-2408-4CB2-88CB-A955D162A59B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
