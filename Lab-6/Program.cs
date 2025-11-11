@@ -2,9 +2,7 @@
 {
   private static void Main(string[] args)
   {
-    Car myCar = new();
-    myCar.Speed = 50;
-    Console.WriteLine("Initial Speed: " + myCar.Speed);
+    Car myCar = new() { TopSpeed = 200 };
 
     myCar.Accelerate(30);
     Console.WriteLine("After Accelerating by 30: " + myCar.Speed);
@@ -14,19 +12,30 @@
 
     myCar.Accelerate(250);
     Console.WriteLine("After Accelerating by 250: " + myCar.Speed);
+
+    myCar.Speed = -20;
+    Console.WriteLine("After setting Speed to -20: " + myCar.Speed);
   }
 }
 
 class Car
 {
   private double speed;
-  private double topSpeed = 200;
+  private double topSpeed;
 
   public double Speed
   {
     get { return speed; }
-    set { speed = value; }
+    set { speed = Math.Clamp(value, 0, TopSpeed); } // Use public TopSpeed property here to ensure EcoMode is considered
   }
+
+  required public double TopSpeed
+  {
+    get { return ApplyEcoMode(topSpeed); }
+    init { topSpeed = Math.Max(0, value); }
+  }
+
+  public bool EcoMode { get; set; } = false;
 
   public void Accelerate(double amount)
   {
@@ -43,4 +52,8 @@ class Car
     else if (newSpeed > topSpeed) speed = topSpeed;
     else speed = newSpeed;
   }
+
+  public bool IsStopped() => speed == 0;
+  public bool IsAtTopSpeed() => speed == TopSpeed;
+  private double ApplyEcoMode(double speed) => EcoMode ? speed * 0.8 : speed;
 }
